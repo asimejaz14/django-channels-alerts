@@ -16,6 +16,8 @@ from django.utils import timezone
 
 from .serializers import BankLogSerializer
 
+channel_name_mapping = {}
+
 
 # Create your views here.
 class BankAPIView1(APIView):
@@ -73,16 +75,16 @@ class BankAPIView2(APIView):
         print(request.data)
         data = request.data.get('data')
         user = "Asim"
+        user_id = "Asim"
 
         # Send data to the specific user's WebSocket
         channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f'notification_user_{user}',
-            {
-                'type': 'notification_message',
-                'message': data,
-            }
-        )
+        channel_name = channel_name_mapping.get(user_id)
+        if channel_name:
+            async_to_sync(channel_layer.send)(channel_name, {
+                "type": "send_alert",
+                "message": data
+            })
 
         return Response("Data Received.", status=status.HTTP_200_OK)
 
