@@ -154,3 +154,4 @@ CHANNEL_LAYERS = {
     },
 }
 
+channel_name_mapping = {}
