@@ -153,4 +153,5 @@ CHANNEL_LAYERS = {
         },
     },
 }
+SESSION_COOKIE_SECURE = True
 
